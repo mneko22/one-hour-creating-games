@@ -1,47 +1,51 @@
 package main
 
-import "fmt"
+import (
+	"log"
 
-type Character struct{
-	Hp int
-	MaxHp int
-	Mp int
-	MaxMp int
-	Name string
+	"fmt"
+
+	"github.com/hajimehoshi/ebiten/v2"
+	"github.com/hajimehoshi/ebiten/v2/ebitenutil"
+
+)
+
+type Charactor struct{
+  HP, MaxHP, MP, MaxMP int
+  Name string
 }
 
 const (
-	MONSTER_PLAYER = iota
-	MONSTER_MAX
+  MONSTER_PLAYER = 1
+  MONSTER_MAX = 1
 )
 
-const (
-	CHARACTER_PLAYER = iota
-	CHARACTER_MONSTER
-	CHARACTER_MAX
-)
+var Player = Charactor{HP: 15, MaxHP: 15, MP: 15, MaxMP: 15, Name: "ゆうしゃ"}
 
-var monsters = [MONSTER_MAX]Character{
-	{15, 15, 15, 15, "ゆうしゃ"},
+var Monsters [MONSTER_MAX]Charactor = [MONSTER_MAX]Charactor{{HP: 15, MaxHP: 15, MP: 15, MaxMP: 15, Name: "すらいむ"}}
+
+func battle () {
+  // nll
 }
 
-var characters = [CHARACTER_MAX]Character{}
-
-func DrawBattleScreen() {
-	fmt.Printf("%v\n", characters[CHARACTER_PLAYER].Name)
-	fmt.Printf("H P ：　%v／%v　M P ：%v／%v\n\n", characters[CHARACTER_PLAYER], characters[CHARACTER_PLAYER].MaxHp, characters[CHARACTER_PLAYER].Mp, characters[CHARACTER_PLAYER].MaxMp)
-	
+type Game struct{}
+var stateNum = 0
+func (g *Game) Update() error {
+	return nil
 }
 
-func Init() {
-	characters[CHARACTER_PLAYER] = monsters[MONSTER_PLAYER]
+func (g *Game) Draw(screen *ebiten.Image) {
+  ebitenutil.DebugPrint(screen, fmt.Sprintf("%s \nHP: %d/%d MP: %d/%d\n", Player.Name, Player.HP, Player.MaxHP, Player.MP, Player.MaxMP))
+}
+
+func (g *Game) Layout(outsideWidth, outsideHeight int) (screenWidth, screenHeight int) {
+	return 320, 240
 }
 
 func main() {
-	Battle()
+	ebiten.SetWindowSize(640, 480)
+	ebiten.SetWindowTitle("text rpg")
+	if err := ebiten.RunGame(&Game{}); err != nil {
+		log.Fatal(err)
+	}
 }
-
-func Battle () {
-	DrawBattleScreen()
-}
-
